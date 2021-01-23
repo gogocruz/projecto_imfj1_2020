@@ -43,7 +43,7 @@ def main():
     obj1.material = Material(Color(1, 0, 0, 1), "TestMaterial1")
     scene.add_object(obj1)
     '''
-    fileloaded = "teddy.obj"
+    fileloaded = ""
     
     if fileloaded == "":
         # Create a pyramid and place it in a scene, at position (0,0,0)
