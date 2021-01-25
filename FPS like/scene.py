@@ -55,6 +55,7 @@ class Scene:
 
         # Render all root-level objects
         for obj in self.objects:
+            #makes objects only being rendered if their in front of the camre
             heading = obj.position - self.camera.position
             dot = Vector3.dot(heading, self.camera.forward())
 
