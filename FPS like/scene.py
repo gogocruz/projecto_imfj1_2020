@@ -55,12 +55,9 @@ class Scene:
 
         # Render all root-level objects
         for obj in self.objects:
-            #obj.render(screen, clip_matrix)
-
-
             heading = obj.position - self.camera.position
             dot = Vector3.dot(heading, self.camera.forward())
 
             if dot > 4:
-                obj.render(screen, clip_matrix, self.camera)
+                obj.render(screen, clip_matrix)
             

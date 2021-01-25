@@ -135,16 +135,19 @@ class Mesh:
                     for item in range(string.count(" ")):
                         if string.find(" ", i) == - 1:
                             face.append(string[i:-1])
-                            print ("teste")
                             break
                         face.append(string[i:string.find(" ",i)])
                         i = string.find(" ", i) + 1
 
+                    if line.find("/") == -1:
+                        faces.append(Vector3(int(face[0]), int(face[1]), int(face[2])))
                     
-                    faces.append(Vector3(int(face[0][:face[0].find("/")]), int(face[1][:face[1].find("/")]), int(face[2][:face[2].find("/")]))) 
+                    else:
+                        faces.append(Vector3(int(face[0][:face[0].find("/")]), int(face[1][:face[1].find("/")]), int(face[2][:face[2].find("/")]))) 
                     
-                    if len(face) >= 3:
-                        faces.append(Vector3(int(face[1][:face[1].find("/")]), int(face[2][:face[2].find("/")]), int(face[3][:face[3].find("/")])))
+                        if len(face) > 3:
+                            faces.append(Vector3(int(face[1][:face[1].find("/")]), int(face[2][:face[2].find("/")]), int(face[3][:face[3].find("/")])))
+                        
 
             f.close()
             
@@ -152,7 +155,7 @@ class Mesh:
             print(".obj/json file not found.") 
 
         for face in faces:
-            Mesh.create_tri(vertices[int(face.x -1)], vertices[int(face.y -1)], vertices[int(face.z -1)], mesh)
+            Mesh.create_tri(vertices[face.x -1], vertices[face.y -1], vertices[face.z -1], mesh)
 
         return mesh
 

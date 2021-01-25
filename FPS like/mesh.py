@@ -6,7 +6,7 @@ import math
 import pygame
 from vector3 import Vector3
 import matrix4
-import camera
+
 
 
 class Mesh:
@@ -82,13 +82,7 @@ class Mesh:
             Mesh.stat_vertex_count += len(poly)
             t0 = time.time()
 
-            dot = 0
-
             for v in poly:
-                heading = v - camera.position
-                dot = Vector3.dot(heading, camera.forward())
-                if dot < 0.95:
-                    break
 
                 # Multiply vertex it by the clip matrix - This function is slightly faster than doing
                 # vout = v * clip_matrix, since it doesn't have to check types or create additional
@@ -100,9 +94,6 @@ class Mesh:
                 # offset it)
                 tpoly.append((w + vout.x / vout.w,
                               h - vout.y / vout.w))
-
-            if dot < 0.95:
-                continue
 
             # Uncomment next line for statistics
             t1 = time.time()
