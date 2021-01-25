@@ -1,9 +1,12 @@
 """Mesh class definition"""
-# Just import time if we need statistics
+
+#imports from libraries
 import time
 import numpy
 import math
 import pygame
+
+#imports from other files
 from vector3 import Vector3
 import matrix4
 
