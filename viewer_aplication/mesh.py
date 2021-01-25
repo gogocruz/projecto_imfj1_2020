@@ -103,85 +103,122 @@ class Mesh:
             Mesh.stat_transform_time += (t1 - t0)
             Mesh.stat_render_time += (t2 - t1)
 
+    '''Function to create a model from given coordinates of vertices and faces of .obj or .json files'''
     @staticmethod
     def create_mesh(path, mesh=None):
-
+            
+        #create mesh if there isn't one
         if mesh is None:
             mesh = Mesh("UnknownMesh")
-
+        
+        #initialize the vertices and faces lists
         vertices = []
         faces = []
 
+        #if there is a model file
         try:
+            #opening file
             f = open(path)
+            #for each line of  the file
             for line in f:
+                #if theres a v alone, without anything after
                 if line [:2] == "v ":
+                    #program will find the first number being it will always appear after the " "
                     index1 = line.find(" ") + 1
+                    # the second 
                     index2 = line.find(" ", index1 + 1)
+                    #and the third
                     index3 = line.find(" ", + index2 + 1)   
-
+                    
+                    # create the vertices by joining the 3 coordinates given by the file
                     vertex = Vector3(float(line[index1:index2]), float(line[index2:index3]), float(line[index3:-1]))
                     vertex = Vector3(round(vertex.x, 2), round(vertex.y, 2),  round(vertex.z, 2))
-
+                    
+                    # append those vertice onto the vertices list
                     vertices.append(vertex)
-
+                    
+                #if there a f
+                #since only the v's can have other letters after we can only put "f"
                 elif line[0] == "f":
-
+                    
+                    #for .obj files theres only one "/" separing the numbers but for .json theres two "/" so we transform the two "/" into only one
                     string = line.replace("//", "/")
-
+                    
+                    # finds the number that we will use that are just the first from the given 3 separated by "/"
                     i = string.find(" ") + 1
+                    #makes a list for the faces of the object
                     face = []
-
+                    
+                    #they can have multiple face coordinates separated by " "
                     for item in range(string.count(" ")):
+                        # will put only the first number on the 3 in the list because we only need that one
                         if string.find(" ", i) == - 1:
                             face.append(string[i:-1])
                             break
                         face.append(string[i:string.find(" ",i)])
                         i = string.find(" ", i) + 1
-
+                    
+                    #we only need the first numbers
                     if line.find("/") == -1:
+                        #using that numbers make a face of the object
                         faces.append(Vector3(int(face[0]), int(face[1]), int(face[2])))
                     
+                    #here we're making the faces(and then appending it to the faces list) two times, one from the start and another until the end because
+                    #the program wasnt making the last two faces if we only went throught them once so we decided to fix that problem
+                    #by making it append the faces twice staring from different point and it fixes the problem
                     else:
                         faces.append(Vector3(int(face[0][:face[0].find("/")]), int(face[1][:face[1].find("/")]), int(face[2][:face[2].find("/")]))) 
-                    
+                        
+                        #for each
                         if len(face) > 3:
                             faces.append(Vector3(int(face[1][:face[1].find("/")]), int(face[2][:face[2].find("/")]), int(face[3][:face[3].find("/")])))
                         
-
+            # closes the files that was being read
             f.close()
             
         except IOError:
             print(".obj/json file not found.") 
-
+            
+        #create triangles from the faces and vertices given by the files
         for face in faces:
             Mesh.create_tri(vertices[face.x -1], vertices[face.y -1], vertices[face.z -1], mesh)
 
         return mesh
 
+    ''' function to create a n-sided pyramid'''
     @staticmethod
+    #defining sides, radius and height of pyramid
     def create_pyramid(numSides=6, radius=1, height=1, mesh=None):
-
+        
+        #if theres no mesh create one
         if mesh is None:
             mesh = Mesh("UnknownPyramid")
         
+        #creates vertices clean list
         vertices = []
 
+        # for each side of the pyramid append the needed vertices
         for j in range(numSides):
             vertices.append(Vector3(radius * numpy.cos(j *(2 * numpy.pi / numSides)), -1, radius * numpy.sin(j*(2 * numpy.pi / numSides))))
-
+        
+        #initialize i variable
         i = 0
-
+        
+        #for each vertice
         for vertex in vertices:
+            #if it isnt the first vertice
             if i >=1:
+                #creat the triangles from the given vertice
                 Mesh.create_tri(vertices[i-1], Vector3(0, height, 0), vertex, mesh)
                 Mesh.create_tri(vertices[i-1], Vector3(0, -1, 0), vertex, mesh)
            
             i = i + 1
-        
+        #if its the first vertice
+        #create the triangles from the given vertices
         Mesh.create_tri(vertices[numSides-1], Vector3(0, height, 0), vertices[0], mesh)
         Mesh.create_tri(vertices[numSides-1], Vector3(0, -1, 0), vertices[0], mesh)
-
+        
+        #return the function
         return mesh
 
     @staticmethod
