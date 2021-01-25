@@ -19,6 +19,7 @@ from quaternion import Quaternion
 class RandomCube(Object3d):
     def __init__(self):
         super().__init__("RandomCube")
+        #defining random height
         height = random.uniform(1,3)
         # Create a cube on a random positions
         self.mesh = Mesh.create_cube((random.uniform(0, 2), height,random.uniform(0, 2)))
@@ -63,11 +64,12 @@ def main():
     pygame.mouse.set_visible(False)
     # Don't lock the mouse cursor to the game window
     pygame.event.set_grab(True)
-
+    
+    #Clean count to make a max nuber of cubes
     count = 0
     #Number of cubes in scene
     while count < 72:
-        
+        #function to add 72 cubes at random
         new_cube = RandomCube()
         scene.add_object(new_cube)
         count += 1
@@ -103,17 +105,22 @@ def main():
         if rel[0] != 0:
             # Rotates the object, considering the time passed (not linked to frame rate)
             q = Quaternion.AngleAxis(axis, math.radians(rotAngle) * delta_time)
-
+            
+            #camera rotation
             scene.camera.rotation = q * scene.camera.rotation
     
-        # Movement Stuff
+        ''' Movement Stuff'''
         
+        #going forwards
         if keys[pygame.K_w]:
             scene.camera.position += scene.camera.forward() * delta_time * 4
+        #going backwards
         if keys[pygame.K_s]:
             scene.camera.position -= scene.camera.forward() * delta_time * 4
+        #going left
         if keys[pygame.K_a]:
             scene.camera.position -= scene.camera.right() * delta_time * 4
+        #going right
         if keys[pygame.K_d]:
             scene.camera.position += scene.camera.right() * delta_time * 4
             
