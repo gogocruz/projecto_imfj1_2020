@@ -1,11 +1,13 @@
-"""Game sample application"""
+"""FPS-like application"""
 
+#libraries used
 import time
 import random
 import math
 import pygame
 import numpy
 
+#imports from other files done
 from scene import Scene
 from object3d import Object3d
 from camera import Camera
@@ -16,6 +18,7 @@ from vector3 import Vector3, dot_product, cross_product
 from quaternion import Quaternion
 
 
+#function to create random cubes of differents sizes and colors
 class RandomCube(Object3d):
     def __init__(self):
         super().__init__("RandomCube")
@@ -69,7 +72,7 @@ def main():
     count = 0
     #Number of cubes in scene
     while count < 72:
-        #function to add 72 cubes at random
+        #function to add 72 cubes in scene at random
         new_cube = RandomCube()
         scene.add_object(new_cube)
         count += 1
