@@ -44,11 +44,11 @@ def main():
     obj1.material = Material(Color(1, 0, 0, 1), "TestMaterial1")
     scene.add_object(obj1)
     '''
-    # colocar o nome do fichero para dar load
-    # se não tiver feicheiro deixar como ""
+    # puts name of file that you wanna load
+    # if you dont want to load a file leave it as ""
     fileloaded = "teste2.obj"
 
-    
+    #if theres so file to be loaded
     if fileloaded == "":
         # Create a pyramid and place it in a scene, at position (0,0,0)
         obj1 = Object3d("TestObject")
@@ -64,11 +64,14 @@ def main():
         obj1.scale = Vector3(1, 1, 1)
         obj1.position = Vector3(0, 0, 0)
         
+        #function to enable objects to be loaded from terminal
         if len(sys.argv) == 2:
             print(True)
             obj1.mesh = Mesh.create_mesh(sys.argv[1])
+        #if nothing at the terminal just run normaly with the name of the file in code
         else:    
             obj1.mesh = Mesh.create_mesh(fileloaded)
+        # add object to viewer
         obj1.material = Material(Color(1, 0, 0, 1), "TestMaterial1")
         scene.add_object(obj1)
 
@@ -93,21 +96,27 @@ def main():
             if event.type == pygame.QUIT:
                 # Exits the application immediately
                 return
+            #if your pressing a key
             elif event.type == pygame.KEYDOWN:
+                #exit the game
                 if event.key == pygame.K_ESCAPE:
                     return
+                # rotate object in y axis
                 if event.key == pygame.K_LEFT:
                     axis = Vector3(0, 1, 0)
                 if event.key == pygame.K_RIGHT:
                     axis = Vector3(0,-1,0)
+                # rotate object in x axis
                 if event.key == pygame.K_UP:
                     axis = Vector3(1, 0, 0)
                 if event.key == pygame.K_DOWN:
                     axis = Vector3(-1, 0, 0)
+                # rotate object in z axis
                 if event.key == pygame.K_PAGEUP:
                     axis = Vector3(0, 0, 1)
                 if event.key == pygame.K_PAGEDOWN:
                     axis = Vector3(0, 0, -1)
+                #normalize axis
                 axis.normalize()
 
         # Clears the screen with a very dark blue (0, 0, 20)
@@ -121,6 +130,7 @@ def main():
 
         #Object movement
         keys=pygame.key.get_pressed()
+        # movementing object up down right and left
         if keys[pygame.K_LEFT]:
             obj1.rotation = q * obj1.rotation 
         if keys[pygame.K_RIGHT]:
@@ -129,6 +139,8 @@ def main():
             obj1.rotation = q * obj1.rotation 
         if keys[pygame.K_DOWN]:
             obj1.rotation = q * obj1.rotation 
+            
+        #functions to make the rotations work
         if keys[pygame.K_PAGEUP]:
             obj1.rotation = q * obj1.rotation
         if keys[pygame.K_PAGEDOWN]:
@@ -145,7 +157,8 @@ def main():
             obj1.position = Vector3(obj1.position.x,obj1.position.y,obj1.position.z-0.006) 
         if keys[pygame.K_e]:
             obj1.position = Vector3(obj1.position.x,obj1.position.y,obj1.position.z+0.006) 
-
+        
+        #rendering objects on to screen
         scene.render(screen)
 
         # Swaps the back and front buffer, effectively displaying what we rendered
